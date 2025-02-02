@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  databricks:
+    image: jupyter/pyspark-notebook
+    container_name: databricks_sim
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_TOKEN=databricks
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - ./notebooks:/home/jovyan/work
+
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack_sim
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3,lambda,dynamodb,iam,cloudformation
+      - DEFAULT_REGION=us-east-1
+      - DATA_DIR=/data
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    volumes:
+      - ./localstack_data:/data
+
